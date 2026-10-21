@@ -1,0 +1,27 @@
+[project]
+name = "hotelsbooking"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "Emil.Kalimulin",email = "m1lkwave-pyth@mail.ru"}
+]
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "django (>=6.1.2,<7.0.0)",
+    "djangorestframework (>=3.18.3,<4.0.0)",
+    "django-cors-headers (>=4.9.0,<5.0.0)",
+    "psycopg[binary] (>=3.3.6,<4.0.0)",
+    "python-decouple (>=3.8,<4.0)",
+]
+
+[tool.poetry]
+packages = [{include = "hotelsbooking", from = "src"}]
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "config.settings"
+python_files = ["test_*.py", "tests.py"]
