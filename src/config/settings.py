@@ -72,7 +72,7 @@ DATABASES = {
         'PASSWORD': config('POSTGRES_PASSWORD'),
         'HOST': config('POSTGRES_HOST'),
         'PORT': config('POSTGRES_PORT'),
-        'AUTOMIC_REQUESTS': True,
+        'ATOMIC_REQUESTS': True,
     }
 }
 

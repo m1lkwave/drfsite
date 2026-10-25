@@ -14,15 +14,19 @@ class CountryAPIList(generics.ListAPIView):
 class CountryHotelAPIList(generics.ListCreateAPIView):
     serializer_class = serializers.HotelsSerializer
 
+    def get_country(self):
+        return get_object_or_404(
+            models.Countries,
+            slug=self.kwargs['country']
+        )
+
     def get_queryset(self):
-        country_slug = self.kwargs['country']
+        country = self.get_country()
+        return models.Hotels.objects.filter(country_id=country.id)
 
-        if not models.Countries.objects.filter(slug=country_slug).exists():
-            raise Http404('такого отеля нет')
-
-        country = models.Countries.objects.get(slug=country_slug)
-
-        return models.Hotels.objects.filter(country_id = country.id)
+    def perform_create(self, serializer):
+        country = self.get_country()
+        serializer.save(country_id=country)
 
 #Класс для отображения всех комнат под указанный отель(человекочитаемый юрл) - только GET запрос
 class HotelRoomsAPIView(generics.ListAPIView):
@@ -54,13 +58,19 @@ class RoomsAPIUpdate(generics.UpdateAPIView):
 class BookingRoomsAPICreateView(generics.ListCreateAPIView):
     serializer_class = serializers.BookingSerializer
 
+    def get_room(self):
+        return get_object_or_404(
+            models.Rooms,
+            pk=self.kwargs['pk']
+        )
+
     def get_queryset(self):
-        room_id = self.kwargs['pk']
+        room = self.get_room()
+        return models.Booking.objects.filter(room_id=room.pk)
 
-        if not models.Rooms.objects.filter(pk=room_id).exists:
-            raise Http404('Такой комнаты нет')
-
-        return models.Booking.objects.filter(room_id=room_id)
+    def perform_create(self, serializer):
+        room = self.get_room()
+        serializer.save(room=room)
 
 #Класс для удаления резервации - только запрос DELETE
 class BookingAPIDelete(generics.DestroyAPIView):
